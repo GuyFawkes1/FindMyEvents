@@ -173,7 +173,7 @@ class EventsAdd extends Component {
                         <label> Is it a Free Event</label>
                         <select className="browser-default custom-select" 
                         onChange={(e) => this.setState({paid: e.target.value})}>
-                            
+                                <option selected disabled>Choose one</option>
                                 <option name="paid" value="free" >Free</option>
                                 <option name="paid" value="paid" >Paid</option>
                         </select>

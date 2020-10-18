@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import axios from "axios";
 
 
-class NotesEdit extends Component {
+class EventsEdit extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            categories:[],
             title: null,
             venue : null,
             startDate : null,
@@ -18,6 +19,17 @@ class NotesEdit extends Component {
             category: null
         }
     }
+    getCategories() {
+        axios.get(`http://localhost:3001/api/category`)
+            .then(result => {
+                const categoriesList = result.data;
+                this.setState({ categories: categoriesList })
+            })
+            .catch(error => console.log("There is some error: ", error));
+    } 
+
+
+  
 
     componentDidMount() {
         axios.get('http://localhost:3001/events/' + this.props.match.params.id)
@@ -35,6 +47,7 @@ class NotesEdit extends Component {
                 });
             })
             .catch(error => console.log("There is some error: ", error));
+        this.getCategories();
 
     }
 
@@ -55,7 +68,7 @@ class NotesEdit extends Component {
         axios.put('http://localhost:3001/events/' + note.id, note)
             .then(result => {
                 console.log("Successfully updated existing note");
-                this.props.history.push('/notes')
+                this.props.history.push('/events')
             })
             .catch(error => console.log("There is some error: ", error));
     }
@@ -134,6 +147,17 @@ class NotesEdit extends Component {
                         </select>
                     </div>
 
+                    <div  className="form-group">
+                        <label> Category</label>
+                        <select className="browser-default custom-select" 
+                        onChange={(e) => this.setState({category: e.target.value})} value={this.state.category?this.state.category._id:''}>
+                            {this.state.categories.map((category, index) => 
+                                <option 
+                                    name="category" 
+                                    value={category._id} >{category.name}</option>)}
+                        </select>
+                    </div>
+
                     <button type="submit" className="btn btn-secondary">Add</button>
                 </form>
             </div>
@@ -142,4 +166,4 @@ class NotesEdit extends Component {
     }
 }
 
-export default NotesEdit;
+export default EventsEdit;

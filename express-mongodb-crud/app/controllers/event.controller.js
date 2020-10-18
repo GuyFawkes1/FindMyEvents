@@ -174,20 +174,23 @@ exports.findByCategory = (req, res) => {
 };
 
 exports.findByCatName = (req, res) => {
-    let catID = Category.find({name:req.params.catName})
-    Event.find({ category : catID }).populate('category')
-	.exec(function (err, events) {
-		if (err){
-			if(err.kind === 'ObjectId') {
-				return res.status(404).send({
-					message: "Events not found with given Category " + req.params.categoryId
-				});                
-			}
-			return res.status(500).send({
-				message: "Error retrieving Products with given Category " + req.params.categoryId
-			});
-		}
-					
-		res.send(events);
-	});
+    Category.find({name:req.params.catName})
+    .exec(function(err2,cats){
+        Event.find({ category : cats[0]._id }).populate('category')
+        .exec(function (err, events) {
+            if (err){
+                if(err.kind === 'ObjectId') {
+                    return res.status(404).send({
+                        message: "Events not found with given Category " + catID
+                    });                
+                }
+                return res.status(500).send({
+                    message: "Error retrieving Events with given Category " + req.params.catName
+                });
+            }
+                        
+            res.send(events);
+        }); 
+    });
+    
 };
