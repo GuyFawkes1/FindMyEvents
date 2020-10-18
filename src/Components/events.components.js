@@ -38,6 +38,7 @@ export default class Events extends Component {
                             <th>Events Name</th>
                             <th>Events Venue</th>
                             <th>Start Time and Date </th>
+                            <th> Category</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -48,6 +49,7 @@ export default class Events extends Component {
                                     <td>{listValue.title}</td>
                                     <td>{listValue.venue}</td>
                                     <td>{listValue.startDate? listValue.startDate.slice(11,16)+", " + listValue.startDate.slice(0,10):''}</td>
+                            <       td>{listValue.category?listValue.category.name:''}</td>
                                     <td>
                                         {/* <Link to={`/events-detail/${listValue._id}`}>Show Details</Link> */}
                                         <Link to={'/events-detail/' + listValue._id}>Show Details</Link>

@@ -25,27 +25,16 @@ class EventsAdd extends Component {
         }
     }
 
-    // handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     if (this.validateForm(this.state.eventsError)) {
-    //       const event = {
-    //         title: this.state.title,
-    //         content: this.state.content,
-    //       };
-    //       Axios.post(`http://localhost:3001/events/`, event)
-    //         .then((result) => {
-    //           console.log("successfully added a new event");
-    //           this.props.history.push("/events");
-    //         })
-    //         .catch((error) => console.log("error occured"));
-    //     } else {
-    //       alert("Invalid entry. Both entries must be grater than 3 characters");
-    //     }
-    //   };
 
+    validateForm = (errors) => {
+        let valid = true;
+        Object.values(errors).forEach((val) => val.length > 0 && (valid = false));
+        return valid;
+    }
+    
     handleSubmit = (event) => {
         event.preventDefault();
-        if(validateForm(this.state.errors)) {
+        if(this.validateForm(this.state.errors)) {
             const eventobj = {
                 title: this.state.title,
                 venue : this.state.venue,
@@ -62,49 +51,50 @@ class EventsAdd extends Component {
                     console.log("Successfully added a new event");
                     this.props.history.push('/events')
                 })
-                .catch(error => console.log("There is some error: ", error));
-        }else {alert("Invalid");}
+                .catch(error => console.log(error));
+        }
     }
 
-    validateForm = (errors) => {
-        let valid = true;
-        Object.values(errors).forEach((val) => val.length > 0 && (valid = false));
-        return valid;
-    }
+    
 
     handleChange = (event) => {
         event.preventDefault();
         const { name, value } = event.target;
         let errors = this.state.errors;
         switch (name) {
-            case 'fullName': 
-              errors.fullName = 
+            case 'title': 
+              errors.title = 
                 value.length < 5
-                  ? 'Full Name must be 5 characters long!'
+                  ? 'Title must be 5 characters long!'
                   : '';
               break;
-            case 'email': 
-              errors.email = 
-                validEmailRegex.test(value)
-                  ? ''
-                  : 'Email is not valid!';
-              break;
-            case 'password': 
-              errors.password = 
-                value.length < 8
-                  ? 'Password must be 8 characters long!'
+            case 'venue': 
+                errors.venue = 
+                value.length < 3
+                    ? 'Venue must be mentioned!'
+                    : '';
+                break;
+
+            case 'startDate': 
+                errors.venue = 
+                value.length < 3
+                    ? 'Start Date must be mentioned!'
+                    : '';
+            break;
+            
+            case 'endDate': 
+                errors.endDate = 
+                value < this.state.startDate
+                  ? 'End Date must be after start date'
                   : '';
               break;
+            
+            
+
             default:
               break;
           }
-      
-
-
-
-
         this.setState({ errors, [name]: value });
-        //console.log(this.state);
     }
 
     getCategories() {
@@ -125,9 +115,11 @@ class EventsAdd extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 <h3>Add Events</h3>
+                
                 <form onSubmit={this.handleSubmit}>
+                    {this.state.errors.title && <div className="alert alert-danger"> {this.state.errors.title}</div>}
                     <div className="form-group">
                         <label>Event Title</label>
                         <input type="text"
@@ -135,6 +127,8 @@ class EventsAdd extends Component {
                             name="title"
                             onChange={this.handleChange} />
                     </div>
+                    
+                    {this.state.errors.venue && <div className="alert alert-danger"> {this.state.errors.venue}</div>}
                     <div className="form-group">
                         <label>Venue</label>
                         <input type="text"
@@ -149,6 +143,8 @@ class EventsAdd extends Component {
                             name="startDate"
                             onChange={this.handleChange} />
                     </div>
+
+                    {this.state.errors.endDate && <div className="alert alert-danger"> {this.state.errors.endDate}</div>}
                     <div className="form-group">
                         <label>End Date and Time</label>
                         <input type="datetime-local"
@@ -184,8 +180,9 @@ class EventsAdd extends Component {
                     </div>
                     <div  className="form-group">
                         <label> Category</label>
-                        <select className="browser-default custom-select" value={this.state.category?(this.state.category._id):''} 
+                        <select className="browser-default custom-select" 
                         onChange={(e) => this.setState({category: e.target.value})}>
+                            <option selected disabled>Choose Category</option>
                             {this.state.categories.map((category, index) => 
                                 <option 
                                     name="category" 
