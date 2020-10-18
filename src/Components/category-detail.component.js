@@ -2,20 +2,22 @@ import React, { Component } from 'react';
 import axios from "axios";
 import { Link } from 'react-router-dom';
 
-export default class Events extends Component {
+export default class CategoryDetails extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            category:{},
             events: []
         }
     }
 
     getEvents() {
-        axios.get(`http://localhost:3001/events`)
+        console.log(this.props.match.params.id);
+        axios.get(`http://localhost:3001/events/category/name/` + this.props.match.params.id)
             .then(result => {
                 const eventsList = result.data;
-                this.setState({ events: eventsList })
+                this.setState({ events: eventsList, category:result.data.catname })
                 console.log(this.state.events)
             })
             .catch(error => console.log("There is some error: ", error));
@@ -28,7 +30,7 @@ export default class Events extends Component {
     render() {
         return (
             <div  className="container">
-                <h4>Manage Events</h4>
+                <h4>Events in {this.props.match.params.id}</h4>
                 <br/>
                 <Link to='/events-add' className="btn btn-secondary">Add New Event</Link>
                 <br/><br/>
@@ -37,7 +39,7 @@ export default class Events extends Component {
                         <tr>
                             <th>Events Name</th>
                             <th>Events Venue</th>
-                            <th>Start Time and Date </th>
+                            <th>Start Date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -47,7 +49,7 @@ export default class Events extends Component {
                                 <tr key={index}>
                                     <td>{listValue.title}</td>
                                     <td>{listValue.venue}</td>
-                                    <td>{listValue.startDate? listValue.startDate.slice(11,16)+", " + listValue.startDate.slice(0,10):''}</td>
+                                    <td>{listValue.startDate}</td>
                                     <td>
                                         {/* <Link to={`/events-detail/${listValue._id}`}>Show Details</Link> */}
                                         <Link to={'/events-detail/' + listValue._id}>Show Details</Link>

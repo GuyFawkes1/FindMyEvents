@@ -15,4 +15,8 @@ module.exports = (app) => {
 
     // Delete a event with eventId
     app.delete('/events/:eventId', events.delete);
+
+    app.get('/events/category/:categoryId', events.findByCategory);
+
+    app.get('/events/category/name/:catName',events.findByCatName);
 }

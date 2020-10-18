@@ -76,7 +76,7 @@ class EventsDetail extends Component {
 
                                 <tr>
                                     <th>Category</th>
-                                    <td>{this.state.event.category}                                   </td>
+                                    <td>{this.state.event.category?this.state.event.category.name:''}                                   </td>
 
                                 </tr>
                                 

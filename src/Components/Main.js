@@ -7,6 +7,8 @@ import Events from './events.components';
 import EventsDetail from './events-detail.component';
 import EventsAdd from './events-add.component';
 import EventsEdit from './events-edit.component';
+import Category from './category.component';
+import CategoryDetails from './category-detail.component';
 
 class Main extends Component {
     render() {
@@ -24,9 +26,13 @@ class Main extends Component {
                                     <li className="nav-item">
                                         <Link to={'/events'} className="nav-link">Events</Link>
                                     </li>
-                                    {/* <li className="nav-item">
-                                        <Link to={'/note'} className="nav-link">Categories</Link>
-                                    </li> */}
+                                    <li className="nav-item">
+                                        <Link to={'/category'} className="nav-link">Categories</Link>
+                                    </li> 
+                                    
+
+
+
                                 </ul>
                             </div>
                         </nav> <br />
@@ -36,6 +42,8 @@ class Main extends Component {
                             <Route path='/events-add' component={EventsAdd} />
                             <Route path='/events-detail/:id' component={EventsDetail} />
                             <Route path='/events-edit/:id' component={EventsEdit} />
+                            <Route path='/category' component={Category}/>
+                            <Route path='/category-detail/:id' component={CategoryDetails}/>
                         </Switch>
                    
                 </Router>                

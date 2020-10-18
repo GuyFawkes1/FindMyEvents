@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 });
 
 require('./app/routes/events.routes.js')(app);
-
+require('./app/routes/category.routes.js')(app);
 
 
 // listen for requests

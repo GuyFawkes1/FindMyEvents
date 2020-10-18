@@ -2,55 +2,50 @@ import React, { Component } from 'react';
 import axios from "axios";
 import { Link } from 'react-router-dom';
 
-export default class Events extends Component {
+export default class Category extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            events: []
+            categories: []
         }
     }
 
-    getEvents() {
-        axios.get(`http://localhost:3001/events`)
+    getCategories() {
+        axios.get('http://localhost:3001/api/category')
             .then(result => {
-                const eventsList = result.data;
-                this.setState({ events: eventsList })
-                console.log(this.state.events)
+                const categoriesList = result.data;
+                this.setState({ categories: categoriesList })
             })
             .catch(error => console.log("There is some error: ", error));
     } 
 
     componentDidMount() {
-        this.getEvents();
+        console.log("here");
+        this.getCategories();
     }
 
     render() {
         return (
             <div  className="container">
-                <h4>Manage Events</h4>
+                <h4>All the Categories</h4>
                 <br/>
-                <Link to='/events-add' className="btn btn-secondary">Add New Event</Link>
-                <br/><br/>
+               
                 <table className="table">
                     <thead className="thead-dark">
                         <tr>
-                            <th>Events Name</th>
-                            <th>Events Venue</th>
-                            <th>Start Time and Date </th>
-                            <th>Actions</th>
+                            <th>Categories</th> 
+                            <th>Actions</th>  
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.events.map((listValue, index) => {
+                        {this.state.categories.map((listValue, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{listValue.title}</td>
-                                    <td>{listValue.venue}</td>
-                                    <td>{listValue.startDate? listValue.startDate.slice(11,16)+", " + listValue.startDate.slice(0,10):''}</td>
+                                    <td>{listValue.name}</td>
                                     <td>
                                         {/* <Link to={`/events-detail/${listValue._id}`}>Show Details</Link> */}
-                                        <Link to={'/events-detail/' + listValue._id}>Show Details</Link>
+                                        <Link to={'/category-detail/' + listValue.name}>Show events</Link>
                                     </td>
                                 </tr>
                             )

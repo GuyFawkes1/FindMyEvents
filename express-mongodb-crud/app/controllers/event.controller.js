@@ -1,5 +1,5 @@
 const Event = require('../models/event.model.js');
-
+const Category = require('../models/category.model.js');
 // Create and Save a new Event
 exports.create = (req, res) => {
     // Validate request
@@ -49,7 +49,7 @@ exports.create = (req, res) => {
 
 // Retrieve and return all events from the database.
 exports.findAll = (req, res) => {
-    Event.find()
+    Event.find().populate('category')
     .then(events => {
         res.send(events);
     }).catch(err => {
@@ -61,7 +61,7 @@ exports.findAll = (req, res) => {
 
 // Find a single event with a eventId
 exports.findOne = (req, res) => {
-    Event.findById(req.params.eventId)
+    Event.findById(req.params.eventId).populate('category')
     .then(event => {
         if(!event) {
             return res.status(404).send({
@@ -156,16 +156,16 @@ exports.delete = (req, res) => {
 };
 
 exports.findByCategory = (req, res) => {
-    Event.find({ category : req.params.category })
+    Event.find({ category : req.params.categoryId }).populate('category')
 	.exec(function (err, events) {
 		if (err){
 			if(err.kind === 'ObjectId') {
 				return res.status(404).send({
-					message: "Events not found with given Category " + req.params.category
+					message: "Events not found with given Category " + req.params.categoryId
 				});                
 			}
 			return res.status(500).send({
-				message: "Error retrieving Products with given Category " + req.params.category
+				message: "Error retrieving Products with given Category " + req.params.categoryId
 			});
 		}
 					
@@ -173,3 +173,21 @@ exports.findByCategory = (req, res) => {
 	});
 };
 
+exports.findByCatName = (req, res) => {
+    let catID = Category.find({name:req.params.catName})
+    Event.find({ category : catID }).populate('category')
+	.exec(function (err, events) {
+		if (err){
+			if(err.kind === 'ObjectId') {
+				return res.status(404).send({
+					message: "Events not found with given Category " + req.params.categoryId
+				});                
+			}
+			return res.status(500).send({
+				message: "Error retrieving Products with given Category " + req.params.categoryId
+			});
+		}
+					
+		res.send(events);
+	});
+};
