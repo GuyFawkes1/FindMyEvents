@@ -12,7 +12,7 @@ const eventSchema = new mongoose.Schema({
     endDate   : String,
     details : String,
     organizer : String,
-    paid: Boolean,
+    paid: String,
     category: String
 });
 

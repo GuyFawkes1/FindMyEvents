@@ -154,3 +154,22 @@ exports.delete = (req, res) => {
         });
     });
 };
+
+exports.findByCategory = (req, res) => {
+    Event.find({ category : req.params.category })
+	.exec(function (err, events) {
+		if (err){
+			if(err.kind === 'ObjectId') {
+				return res.status(404).send({
+					message: "Events not found with given Category " + req.params.category
+				});                
+			}
+			return res.status(500).send({
+				message: "Error retrieving Products with given Category " + req.params.category
+			});
+		}
+					
+		res.send(events);
+	});
+};
+
